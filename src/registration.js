@@ -2,7 +2,7 @@
 var express = require('express');
 var router = express.Router();
 
-var UserModel = require('./model/oauth_models').UserModel;
+var UserModel = require('./model/oauth_models').User;
 
 module.exports = router;
 

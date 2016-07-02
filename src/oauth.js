@@ -15,7 +15,7 @@ module.exports.oauth = oauth;
 
 
 var oauth_models = require('./model/oauth_models');
-var UserModel = oauth_models.UserModel;
+var UserModel = oauth_models.User;
 
 var express = require('express');
 var router = express.Router();
