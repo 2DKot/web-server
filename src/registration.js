@@ -1,13 +1,13 @@
-/// <reference path="../typings/tsd.d.ts" />
 "use strict";
+var express = require('express');
+var router = express.Router();
 
-import {Request, Response, Router} from 'express';
-import {UserModel} from './model/oauth_models';
-var router = Router();
+var UserModel = require('./model/oauth_models').User;
+
 module.exports = router;
 
-router.post("/users", function(req: Request, res: Response, next) {
-    function paramNotFound(paramName: string) {
+router.post("/users", function(req, res, next) {
+    function paramNotFound(paramName) {
         res.json(400, {
             message: 'Need for ' + paramName + ' in request body!'
         });

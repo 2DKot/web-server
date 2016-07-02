@@ -1,12 +1,10 @@
-/// <reference path="../typings/tsd.d.ts" />
 "use strict";
+var express = require('express');
+var router = express.Router();
 
-import {Request, Response, Router} from 'express';
+module.exports = router;
 
-var cors: Router = Router();
-module.exports = cors;
-
-cors.all("/*", function(req: Request, res: Response, next) {
+router.all("/*", function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept, authorization');
@@ -14,7 +12,7 @@ cors.all("/*", function(req: Request, res: Response, next) {
     next();
 });
 
-cors.options("/*", function(req: Request, res: Response, next) {
+router.options("/*", function(req, res, next) {
     res.statusCode = 204;
     res.end();
 });

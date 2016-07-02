@@ -1,27 +1,29 @@
-/// <reference path="../typings/tsd.d.ts" />
 "use strict";
 
-import oauthserver = require('oauth2-server');
+var oauthserver = require('oauth2-server');
 
-export var oauth = oauthserver({
+module.exports = { }
+
+var oauth = oauthserver({
   model: require('./oauth_model'),
   grants: ['password'],
   debug: true,
   passthroughErrors: false
 });
 
+module.exports.oauth = oauth;
 
-import {UserModel, IUser} from './model/oauth_models';
-import {Request, Response, Router} from 'express';
 
-export interface AuthorisedRequest extends Request {
-    user: IUser;
-}
+var oauth_models = require('./model/oauth_models');
+var UserModel = oauth_models.User;
 
-export var getUser = Router();
+var express = require('express');
+var router = express.Router();
 
-getUser.use(oauth.authorise());
-getUser.use(function getUser(req: Request, res: Response, next) {
+module.exports.getUser = router;
+
+router.use(oauth.authorise());
+router.use(function getUser(req, res, next) {
     console.log("I'm in getUser")
     console.log(req.user);
     UserModel.findOne({ _id: req.user.id }, function(err, user) {

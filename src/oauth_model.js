@@ -1,24 +1,23 @@
-/// <reference path="../typings/tsd.d.ts" />
 "use strict";
 
-import * as OAuth from 'oauth2-server';
+var OAuth = require('oauth2-server');
 
-import {AccessTokenModel, RefreshTokenModel, ClientModel, UserModel} from './model/oauth_models';
+var models = require('./model/oauth_models');
 
 var model = module.exports;
 
 model.getAccessToken = function (bearerToken, callback) {
   console.log('in getAccessToken (bearerToken: ' + bearerToken + ')');
 
-  AccessTokenModel.findOne({ accessToken: bearerToken }, callback);
+  models.AccessToken.findOne({ accessToken: bearerToken }, callback);
 };
 
-model.getClient = function (clientId, clientSecret, callback: OAuth.GetClientCallback) {
+model.getClient = function (clientId, clientSecret, callback) {
   console.log('in getClient (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ')');
   if (clientSecret === null) {
-    return ClientModel.findOne({ clientId: clientId }, callback);
+    return models.Client.findOne({ clientId: clientId }, callback);
   }
-  ClientModel.findOne({ clientId: clientId, clientSecret: clientSecret }, callback);
+  models.Client.findOne({ clientId: clientId, clientSecret: clientSecret }, callback);
 };
 
 // !!! Now all apps can get all types of grant !!!
@@ -31,7 +30,7 @@ model.grantTypeAllowed = function (clientId, grantType, callback) {
 model.saveAccessToken = function (token, clientId, expires, userId, callback) {
   console.log('in saveAccessToken (token: ' + token + ', clientId: ' + clientId + ', userId: ' + userId + ', expires: ' + expires + ')');
 
-  var accessToken = new AccessTokenModel({
+  var accessToken = new models.AccessToken({
     accessToken: token,
     clientId: clientId,
     userId: userId,
@@ -47,7 +46,7 @@ model.saveAccessToken = function (token, clientId, expires, userId, callback) {
 model.getUser = function (username, password, callback) {
   console.log('in getUser (username: ' + username + ', password: ' + password + ')');
 
-  UserModel.findOne({ username: username, password: password }, function(err, user) {
+  models.User.findOne({ username: username, password: password }, function(err, user) {
     if(err || !user) return callback(err, null);
     callback(null, user.id);
   });
@@ -59,7 +58,7 @@ model.getUser = function (username, password, callback) {
 model.saveRefreshToken = function (token, clientId, expires, userId, callback) {
   console.log('in saveRefreshToken (token: ' + token + ', clientId: ' + clientId +', userId: ' + userId + ', expires: ' + expires + ')');
 
-  var refreshToken = new RefreshTokenModel({
+  var refreshToken = new models.RefreshToken({
     refreshToken: token,
     clientId: clientId,
     userId: userId,
@@ -72,5 +71,5 @@ model.saveRefreshToken = function (token, clientId, expires, userId, callback) {
 model.getRefreshToken = function (refreshToken, callback) {
   console.log('in getRefreshToken (refreshToken: ' + refreshToken + ')');
 
-  RefreshTokenModel.findOne({ refreshToken: refreshToken }, callback);
+  models.RefreshToken.findOne({ refreshToken: refreshToken }, callback);
 };
