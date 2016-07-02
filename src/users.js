@@ -1,17 +1,13 @@
-/// <reference path="../typings/tsd.d.ts" />
 "use strict";
 
-import {Request, Response, Router} from 'express';
-import {UserModel, IUser} from './model/oauth_models';
-import {Types} from 'mongoose'
-
-var router = Router();
+var express = require('express');
+var router = express.Router();
 module.exports = router;
 
-router.get("/:id", function(req: Request, res: Response, next) {
+router.get("/:id", function(req, res, next) {
     console.log("intered in users/" + req.params.id);
     UserModel.findOne({ _id: new Types.ObjectId(req.params.id) }, { password: 0 },
-        (err: any, user: IUser) => {
+        (err, user) => {
             console.log("find complete");
             if (err) {
                 res.status(500).json({

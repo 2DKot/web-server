@@ -1,28 +1,28 @@
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 
-import express = require('express');
-var app: express.Application = express();
-import bodyParser = require('body-parser');
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-var cors: express.Router = require('./cors');
+var cors = require('./cors');
 app.use(cors);
 
-var registration: express.Router = require('./registration');
+var registration = require('./registration');
 app.use(registration);
 
-var strategies: express.Router = require('./strategies');
+var strategies = require('./strategies');
 app.use('/strategies/', strategies);
 
-var users: express.Router = require('./users');
+var users = require('./users');
 app.use('/users/', users);
 
-var router: express.Router = express.Router();
+var router = express.Router();
 
-router.get('/hello/:name', function(req: express.Request, res: express.Response, next) {
+router.get('/hello/:name', function(req, res, next) {
     //There is no need to check that name param isn't undefined.
     //Request /hello/ wouldn't handled by this router.
     
@@ -32,7 +32,7 @@ router.get('/hello/:name', function(req: express.Request, res: express.Response,
     });
 });
 
-router.post('/test', function(req: express.Request, res: express.Response, next) {
+router.post('/test', function(req, res, next) {
     console.log(req.headers);
     console.log(req.body);
     res.end();
@@ -40,12 +40,13 @@ router.post('/test', function(req: express.Request, res: express.Response, next)
 
 app.use(router);
 
-
-import {oauth, getUser, AuthorisedRequest} from './oauth';
+var oauthModule = require('./oauth');
+var oauth = oauthModule.oauth;
+var getUser = oauthModule.getUser;
 
 app.all('/oauth/token', oauth.grant());
 
-app.use(function(err: any, req: express.Request, res: Response, next: express.NextFunction) {
+app.use(function(err, req, res, next) {
     if(!err || err.name !== "OAuth2Error") {
         next();
         return;
@@ -53,11 +54,9 @@ app.use(function(err: any, req: express.Request, res: Response, next: express.Ne
     res.status(err.code).json(err);
 })
 
-import {Model} from 'mongoose';
-import {UserModel} from './model/oauth_models';
-import Response = express.Response;
+var Response = express.Response;
 
-app.all('/secret', getUser, function(req: AuthorisedRequest, res: Response) {
+app.all('/secret', getUser, function(req, res) {
     console.log('user:');
     console.log(req.user);
     res.status(200).json({
