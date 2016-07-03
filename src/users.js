@@ -1,12 +1,14 @@
 "use strict";
 
+var models = require('./model/oauth_models');
 var express = require('express');
 var router = express.Router();
+var mongoose = require('mongoose');
 module.exports = router;
 
 router.get("/:id", function(req, res, next) {
     console.log("intered in users/" + req.params.id);
-    UserModel.findOne({ _id: new Types.ObjectId(req.params.id) }, { password: 0 },
+    models.User.findOne({ _id: new mongoose.Types.ObjectId(req.params.id) }, { password: 0 },
         (err, user) => {
             console.log("find complete");
             if (err) {

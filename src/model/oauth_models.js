@@ -1,6 +1,5 @@
 "use strict";
 
-var connection = require('./mongoose_connection');
 var mongoose = require('mongoose');
 
 
@@ -32,7 +31,7 @@ var OAuthUsersSchema = new mongoose.Schema({
 
 module.exports = { };
 
-module.exports.AccessToken = connection.model('OAuthAccessTokens', OAuthAccessTokensSchema);
-module.exports.RefreshToken = connection.model('OAuthRefreshTokens', OAuthRefreshTokensSchema);
-module.exports.Client = connection.model('OAuthClients', OAuthClientsSchema);
-module.exports.User = connection.model('Users', OAuthUsersSchema);
+module.exports.AccessToken = mongoose.model('OAuthAccessTokens', OAuthAccessTokensSchema);
+module.exports.RefreshToken = mongoose.model('OAuthRefreshTokens', OAuthRefreshTokensSchema);
+module.exports.Client = mongoose.model('OAuthClients', OAuthClientsSchema);
+module.exports.User = mongoose.model('Users', OAuthUsersSchema);

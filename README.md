@@ -1,4 +1,4 @@
-After all you need to install NodeJS from https://nodejs.org/.
+Before all you need to install NodeJS from https://nodejs.org/.
 
 If you haven't install gulp before, run:
 ``` bash
