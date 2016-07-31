@@ -51,16 +51,20 @@ app.use(function(err, req, res, next) {
         next();
         return;
     }
-    res.status(err.code).json(err);
+    var status = err.code;
+    if(err.message === 'User credentials are invalid') {
+        status = 401;
+    }
+    res.status(status).json(err);
 })
 
 var Response = express.Response;
 
-app.all('/secret', getUser, function(req, res) {
+app.all('/me', getUser, function(req, res) {
     console.log('user:');
     console.log(req.user);
     res.status(200).json({
-        message: "Юзер " + req.user.username + " c почтой " + req.user.email + " достиг секретного места!"
+        user: req.user
     });
 });
 

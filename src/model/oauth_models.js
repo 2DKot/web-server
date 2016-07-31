@@ -25,8 +25,11 @@ var OAuthClientsSchema = new mongoose.Schema({
 
 var OAuthUsersSchema = new mongoose.Schema({
     username: String,
+    fullname: String,
     password: String,
-    email: { type: String, default: '' }
+    email: { type: String, default: '' },
+    avatar: { contentType: String, data: Buffer},
+    isSuperuser: Boolean
 });
 
 module.exports = { };

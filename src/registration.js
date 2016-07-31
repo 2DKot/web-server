@@ -28,7 +28,7 @@ router.post("/users", function(req, res, next) {
         paramNotFound('email'); 
         return;
     };
-    //TODO: username || email
+
     UserModel.findOne({ $or: [{username: username}, {email: email}] }, function(err, user) {
         console.log(user);
         if(err) {
