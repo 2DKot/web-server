@@ -16,6 +16,7 @@ router.post("/users", function(req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
     var email = req.body.email;
+    var fullname = req.body.fullname;
     if (!username) {
         paramNotFound('username');
         return;
@@ -39,20 +40,21 @@ router.post("/users", function(req, res, next) {
         }
         if (user) {
             if(user.username == username) {
-                var conflictPart = "name " + username; 
+                var conflictPart = "username"; 
             }
             else if(user.email == email) {
-                var conflictPart = "email " + email;
+                var conflictPart = "email";
             }
             res.status(409).json({
-                message: 'There is already user with ' + conflictPart + '.'
+                alreadyExists: conflictPart
             });
             return;
         }
         var user = new UserModel({
             username: username,
             password: password,
-            email: email
+            email: email,
+            fullname: fullname
         });
         user.save(function(err) {
             if(err) {
