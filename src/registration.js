@@ -54,7 +54,8 @@ router.post("/users", function(req, res, next) {
             username: username,
             password: password,
             email: email,
-            fullname: fullname
+            fullname: fullname,
+            isSuperUser: false
         });
         user.save(function(err) {
             if(err) {

@@ -70,8 +70,12 @@ router.post("/", getUser, function(req, res, next) {
     );
 });
 
-router.get("/", function(req, res, next) {
-    StrategyModel.find({}, {class: 0} , (err, strategies) => {
+router.get("/", getUser, function(req, res, next) {
+    var query = {}
+    if(!req.user.isSuperuser) {
+        query.userId = req.user.id
+    }
+    StrategyModel.find(query, {class: 0} , (err, strategies) => {
         if (err) {
             res.status(500).json({
                 message: "Database error."
