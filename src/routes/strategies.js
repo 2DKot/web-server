@@ -1,12 +1,12 @@
 "use strict";
-var oauth_module = require('./oauth');
+var oauth_module = require('../oauth');
 var getUser = oauth_module.getUser;
-var UserModel = require('./model/oauth_models').UserModel;
-var StrategyModel = require('./model/strategy');
+var UserModel = require('../model/oauth_models').UserModel;
+var StrategyModel = require('../model/strategy');
 var needle = require('needle')
 var express = require('express');
 var router = express.Router();
-var config = require('../config.json');
+var config = require('../../config.json');
 
 module.exports = router;
 

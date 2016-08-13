@@ -1,10 +1,10 @@
 "use strict";
 
-var models = require('./model/oauth_models');
+var models = require('../model/oauth_models');
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var oauth_module = require('./oauth');
+var oauth_module = require('../oauth');
 var getUser = oauth_module.getUser;
 module.exports = router;
 
@@ -68,6 +68,76 @@ router.put("/:id", getUser, function(req,res,next) {
             res.status(200).json({
                 message: "User was updated.",
                 user: user
+            });
+        });
+    });
+});
+
+router.post("/", function(req, res, next) {
+    function paramNotFound(paramName) {
+        res.status(400).json({
+            status: 400,
+            message: 'Need for ' + paramName + ' in request body!'
+        });
+    };
+    
+    var username = req.body.username;
+    var password = req.body.password;
+    var email = req.body.email;
+    var fullname = req.body.fullname;
+    if (!username) {
+        paramNotFound('username');
+        return;
+    };
+    if (!password) {
+        paramNotFound('password');
+        return;
+    };
+    if(!email) {
+        paramNotFound('email'); 
+        return;
+    };
+
+    models.User.findOne({ $or: [{username: username}, {email: email}] }, function(err, user) {
+        console.log(user);
+        if(err) {
+            res.status(500).json({
+                status: 500,
+                message: "Database error."
+            });
+            throw err;
+        }
+        if (user) {
+            if(user.username == username) {
+                var conflictPart = "username"; 
+            }
+            else if(user.email == email) {
+                var conflictPart = "email";
+            }
+            res.status(409).json({
+                status: 409,
+                alreadyExists: conflictPart
+            });
+            return;
+        }
+        var user = new models.User({
+            username: username,
+            password: password,
+            email: email,
+            fullname: fullname,
+            isSuperUser: false
+        });
+        user.save(function(err) {
+            if(err) {
+                res.status(500).json({
+                    status: 500,
+                    message: "Database error."
+                });
+                throw err;
+            }
+            res.status(201).json({
+                status: 201,
+                message: "User " + username + " was successfully registered."
             });
         });
     });
