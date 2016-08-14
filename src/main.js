@@ -13,8 +13,16 @@ app.use(cors)
 
 const routes = require('./routes')
 for (let route of routes) {
-  app.use('/' + route + '/', require('./routes/' + route))
+  app.use('/' + route + '/', require('./routes/' + route).router)
 }
+
+let fakeRepository = {
+  getById: function (id, callback) {
+    return callback(null, { username: 'Вася пупкин' })
+  }
+}
+
+app.use('/users/', require('./routes/users')(fakeRepository))
 
 const oauthModule = require('./oauth')
 const oauth = oauthModule.oauth
