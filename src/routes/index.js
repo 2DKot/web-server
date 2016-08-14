@@ -1,5 +1,5 @@
 module.exports = [
-    'users',
-    'strategies',
-    'me'
+  'users',
+  'strategies',
+  'me'
 ]

@@ -1,4 +1,3 @@
-"use strict";
-var fs = require('fs');
+'use strict'
 
-module.exports = require('../config.json');
+module.exports = require('../config.json')
