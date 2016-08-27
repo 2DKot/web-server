@@ -4,6 +4,7 @@
   "description": "REST server for web-client of AI-Contester.",
   "main": "index.js",
   "scripts": {
+    "start": "node src/main",
     "test": "ava test/*-test.js -v"
   },
   "author": "Baydin (2DKot) Konstantin",
