@@ -4,7 +4,6 @@ module.exports = function () {
   var getUser = oauth_module.getUser
   var express = require('express')
   var router = express.Router()
-  module.exports.router = router
 
   router.all('/', getUser, function (req, res) {
     console.log('user:')
@@ -13,5 +12,5 @@ module.exports = function () {
       user: req.user
     })
   })
-  return router
+  return { private: router }
 }

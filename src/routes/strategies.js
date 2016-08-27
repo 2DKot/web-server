@@ -8,9 +8,7 @@ module.exports = function () {
   var router = express.Router()
   var config = require('../../config.json')
 
-  module.exports = router
-
-  router.post('/', getUser, function (req, res, next) {
+  router.post('/', function (req, res, next) {
     function paramNotFound (paramName) {
       res.status(400).json({
         message: 'Need for ' + paramName + ' in request body!'
@@ -87,5 +85,5 @@ module.exports = function () {
       })
     })
   })
-  return router
+  return { private: router }
 }

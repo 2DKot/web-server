@@ -1,4 +1,4 @@
-[![Build Status: Linux](https://api.travis-ci.org/AI-Contester/web-server.svg?branch=testing-integration)](https://travis-ci.org/AI-Contester/web-server)   
+[![Build Status: Linux](https://api.travis-ci.org/AI-Contester/web-server.svg?branch=develop)](https://travis-ci.org/AI-Contester/web-server)   
 
 ## Requirements
 You need to install [NodeJS](https://nodejs.org/) and [MongoDB](https://www.mongodb.com)
