@@ -1,4 +1,6 @@
 module.exports = [
-  'strategies',
-  'me'
+  { name: 'strategies', repositories: [] },
+  { name: 'me', repositories: [] },
+  { name: 'users', repositories: ['users'] }
 ]
+

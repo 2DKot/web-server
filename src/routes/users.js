@@ -1,10 +1,8 @@
 'use strict'
 
 module.exports = function (usersRepository) {
-  var models = require('../model/oauth_models')
   var express = require('express')
   var router = express.Router()
-  var mongoose = require('mongoose')
   var oauth_module = require('../oauth')
   var getUser = oauth_module.getUser
 
@@ -12,6 +10,7 @@ module.exports = function (usersRepository) {
     console.log('intered in users/' + req.params.id)
     usersRepository.getById(req.params.id, (err, user) => {
       console.log('find complete')
+      console.log({err: err, user: user})
       if (err) {
         res.status(500).json({
           message: 'Database error.'
@@ -21,7 +20,7 @@ module.exports = function (usersRepository) {
       console.log('there is no errors')
       if (!user) {
         console.log('not found')
-        res.status(200).json({
+        res.status(404).json({
           message: 'User wasn\'t found.'
         })
         return
@@ -34,7 +33,7 @@ module.exports = function (usersRepository) {
   })
 
   router.put('/:id', getUser, function (req, res, next) {
-    models.User.findOne({ _id: new mongoose.Types.ObjectId(req.params.id) }, { password: 0 }, (err, user) => {
+    usersRepository.getById(req.params.id, (err, user) => {
       console.log('find complete')
       if (err) {
         res.status(500).json({
@@ -56,8 +55,7 @@ module.exports = function (usersRepository) {
       if (req.body.avatar) {
         console.error('Avatar saving not implemented yet.')
       }
-
-      user.save(function (err, user) {
+      usersRepository.update(user, function (err, result) {
         if (err) {
           res.status(500).json({
             message: 'Database error.'
@@ -97,8 +95,7 @@ module.exports = function (usersRepository) {
       return
     };
 
-    let query = { $or: [{username: username}, {email: email}] }
-    models.User.findOne(query, function (err, existing_user) {
+    usersRepository.getByNameOrEmail(username, email, function (err, existing_user) {
       if (err) {
         res.status(500).json({
           status: 500,
@@ -119,14 +116,7 @@ module.exports = function (usersRepository) {
         })
         return
       }
-      let user = new models.User({
-        username: username,
-        password: password,
-        email: email,
-        fullname: fullname,
-        isSuperUser: false
-      })
-      user.save(function (err) {
+      usersRepository.create(username, password, email, fullname, function (err) {
         if (err) {
           res.status(500).json({
             status: 500,
@@ -141,6 +131,5 @@ module.exports = function (usersRepository) {
       })
     })
   })
-
   return router
 }

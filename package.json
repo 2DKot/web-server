@@ -4,7 +4,7 @@
   "description": "REST server for web-client of AI-Contester.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "test": "ava test/*-test.js -v"
   },
   "author": "Baydin (2DKot) Konstantin",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "temp": "^0.8.3"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^3.0.2"
+    "ava": "^0.16.0",
+    "supertest": "^2.0.0"
   }
 }

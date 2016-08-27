@@ -24,3 +24,6 @@ npm-debug.log*
 
 # node-waf configuration
 #.lock-wscript
+
+.vscode
+/jsconfig.json
