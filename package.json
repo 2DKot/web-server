@@ -4,7 +4,8 @@
   "description": "REST server for web-client of AI-Contester.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/main",
+    "test": "ava test/*-test.js -v"
   },
   "author": "Baydin (2DKot) Konstantin",
   "license": "MIT",
@@ -13,9 +14,14 @@
     "body-parser": "^1.15.0",
     "del": "^2.2.0",
     "express": "^4.13.4",
+    "mongodb": "^2.2.5",
     "mongoose": "^4.4.5",
     "needle": "^1.0.0",
     "oauth2-server": "^2.4.1",
     "temp": "^0.8.3"
+  },
+  "devDependencies": {
+    "ava": "^0.16.0",
+    "supertest": "^2.0.0"
   }
 }

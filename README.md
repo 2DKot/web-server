@@ -1,23 +1,19 @@
-Before all you need to install NodeJS from https://nodejs.org/.
+[![Build Status: Linux](https://api.travis-ci.org/AI-Contester/web-server.svg?branch=testing-integration)](https://travis-ci.org/AI-Contester/web-server)   
 
-If you haven't install gulp before, run:
-``` bash
-npm install gulp typescript -g
-```
+## Requirements
+You need to install [NodeJS](https://nodejs.org/) and [MongoDB](https://www.mongodb.com)
+
 Then, run in 'web-server' folder:
-``` bash
+``` console
 npm install
 ```
-First build
-``` bash
-gulp build-app
+
+## Run
+``` console
+npm start
 ```
-Run
-``` bash
-node dist/main
-```
-Rebuild
-``` bash
-gulp clean
-gulp build-app
+
+## Test
+``` console
+npm test
 ```
