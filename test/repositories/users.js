@@ -35,8 +35,8 @@ module.exports.getById = function (id, callback) {
 module.exports.getByNameOrEmail = function (username, email, callback) {
   if (username === 'kot') {
     return callback(null, user1)
-  } else if (email === 'admin@aicontester') {
-    return callback(null, user2)
+  } else if (email === 'kot@mail.ru') {
+    return callback(null, user1)
   } else {
     return callback(null, null)
   }

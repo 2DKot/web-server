@@ -8,11 +8,11 @@ const routes = [{url: '/users/', router: require('../src/routes/users.js')(requi
 
 const fakeAuth = require('./fake-auth')
 
-const privateApp = require('../src/app')(routes, fakeAuth.authorizedUser)
-const publicApp = require('../src/app')(routes, fakeAuth.anonymousUser)
+const authorized = require('../src/app')(routes, fakeAuth.authorizedUser)
+const anonymous = require('../src/app')(routes, fakeAuth.anonymousUser)
 
 test.cb('/users/1/ return user object', t => {
-  request(publicApp)
+  request(anonymous)
     .get('/users/1/')
     .end(function (err, res) {
       t.falsy(err)
@@ -28,7 +28,7 @@ test.cb('/users/1/ return user object', t => {
 })
 
 test.cb('/users/10/ return http-404', t => {
-  request(publicApp)
+  request(anonymous)
     .get('/users/10/')
     .end(function (err, res) {
       t.falsy(err)
@@ -38,7 +38,7 @@ test.cb('/users/10/ return http-404', t => {
 })
 
 test.cb('Sign up correct', t => {
-  request(publicApp)
+  request(anonymous)
     .post('/users/')
     .send({
       username: 'jenya',
@@ -53,7 +53,7 @@ test.cb('Sign up correct', t => {
 })
 
 test.cb('Sign up missed username', t => {
-  request(publicApp)
+  request(anonymous)
     .post('/users/')
     .send({
       password: '123',
@@ -68,7 +68,7 @@ test.cb('Sign up missed username', t => {
 })
 
 test.cb('Sign up missed email', t => {
-  request(publicApp)
+  request(anonymous)
     .post('/users/')
     .send({
       username: 'jenya',
@@ -83,7 +83,7 @@ test.cb('Sign up missed email', t => {
 })
 
 test.cb('Sign up missed password', t => {
-  request(publicApp)
+  request(anonymous)
     .post('/users/')
     .send({
       username: 'jenya',
@@ -97,10 +97,38 @@ test.cb('Sign up missed password', t => {
     })
 })
 
-test.todo('Sign up conflict')
+test.cb('Sign up username conflict', t => {
+  request(anonymous)
+    .post('/users/')
+    .send({
+      username: 'kot',
+      password: '123',
+      email: 'jenya@mail.com'
+    })
+    .end(function (err, res) {
+      t.falsy(err)
+      t.is(res.status, 409, res.body.message)
+      t.end()
+    })
+})
+
+test.cb('Sign up email conflict', t => {
+  request(anonymous)
+    .post('/users/')
+    .send({
+      username: 'jenya',
+      password: '123',
+      email: 'kot@mail.ru'
+    })
+    .end(function (err, res) {
+      t.falsy(err)
+      t.is(res.status, 409, res.body.message)
+      t.end()
+    })
+})
 
 test.cb('Modify user full name', t => {
-  request(privateApp)
+  request(authorized)
     .put('/users/1/')
     .send({
       fullname: 'jenya'
@@ -112,6 +140,41 @@ test.cb('Modify user full name', t => {
     })
 })
 
-test.todo('Modify by anonymous')
-test.todo('Modify another user')
-test.todo('Modify unexisting user')
+test.cb('Modify user by anonymous', t => {
+  request(anonymous)
+    .put('/users/1/')
+    .send({
+      fullname: 'jenya'
+    })
+    .end(function (err, res) {
+      t.falsy(err)
+      t.is(res.status, 401, res.body.message)
+      t.end()
+    })
+})
+
+test.cb('Modify another user', t => {
+  request(authorized)
+    .put('/users/2/')
+    .send({
+      fullname: 'jenya'
+    })
+    .end(function (err, res) {
+      t.falsy(err)
+      t.is(res.status, 403, res.body.message)
+      t.end()
+    })
+})
+
+test.cb('Modify unexisting user', t => {
+  request(authorized)
+    .put('/users/10/')
+    .send({
+      fullname: 'jenya'
+    })
+    .end(function (err, res) {
+      t.falsy(err)
+      t.is(res.status, 403, res.body.message)
+      t.end()
+    })
+})

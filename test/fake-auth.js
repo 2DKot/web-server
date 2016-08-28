@@ -9,5 +9,4 @@ module.exports.authorizedUser = function (req, res, next) {
 
 module.exports.anonymousUser = function (req, res, next) {
   res.status('401').json({ message: 'Not authorized.' })
-  next()
 }

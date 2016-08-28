@@ -13,7 +13,7 @@ for (let route of routesNames) {
   })
 }
 
-const oauthModule = ('./oauth')
+const oauthModule = require('./oauth')
 const app = require('./app')(routes, oauthModule.getUser)
 
 require('./model/mongoose_connection')

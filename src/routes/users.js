@@ -32,6 +32,12 @@ module.exports = function (usersRepository) {
   })
 
   routerPrivate.put('/:id', function (req, res, next) {
+    if (req.params.id !== req.user._id.toString()) {
+      res.status(403).json({
+        message: 'You haven\'t permission to modify another user.'
+      })
+      return
+    }
     usersRepository.getById(req.params.id, (err, user) => {
       console.log('find complete')
       if (err) {
