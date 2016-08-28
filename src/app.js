@@ -1,9 +1,10 @@
 'use strict'
-module.exports = function (routes) {
+module.exports = function (routes, authMiddleware) {
   const express = require('express')
   const app = express()
   const bodyParser = require('body-parser')
-  require('./model/mongoose_connection')
+  
+  const oauthModule = require('./oauth')
 
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
@@ -12,17 +13,20 @@ module.exports = function (routes) {
   app.use(cors)
 
   for (let route of routes) {
-    app.use(route.url, route.router)
+    if (route.router.public) app.use(route.url, route.router.public)
+    if (route.router.private) app.use(route.url, authMiddleware, route.router.private)
+    if (!route.router.public && !route.router.private) {
+      console.log('WARNING: route', route.url, 'has no public neither private routes')
+    }
   }
 
-  const oauthModule = require('./oauth')
   const oauth = oauthModule.oauth
 
   app.all('/oauth/token', oauth.grant())
 
   app.use(function (err, req, res, next) {
     if (!err || err.name !== 'OAuth2Error') {
-      next()
+      res.status(500).json({message: err.message})
       return
     }
     var status = err.code

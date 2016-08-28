@@ -2,11 +2,10 @@
 
 module.exports = function (usersRepository) {
   var express = require('express')
-  var router = express.Router()
-  var oauth_module = require('../oauth')
-  var getUser = oauth_module.getUser
+  var routerPublic = express.Router()
+  var routerPrivate = express.Router()
 
-  router.get('/:id', function (req, res, next) {
+  routerPublic.get('/:id', function (req, res, next) {
     console.log('intered in users/' + req.params.id)
     usersRepository.getById(req.params.id, (err, user) => {
       console.log('find complete')
@@ -32,7 +31,13 @@ module.exports = function (usersRepository) {
     })
   })
 
-  router.put('/:id', getUser, function (req, res, next) {
+  routerPrivate.put('/:id', function (req, res, next) {
+    if (req.params.id !== req.user._id.toString()) {
+      res.status(403).json({
+        message: 'You haven\'t permission to modify another user.'
+      })
+      return
+    }
     usersRepository.getById(req.params.id, (err, user) => {
       console.log('find complete')
       if (err) {
@@ -70,7 +75,7 @@ module.exports = function (usersRepository) {
     })
   })
 
-  router.post('/', function (req, res, next) {
+  routerPublic.post('/', function (req, res, next) {
     function paramNotFound (paramName) {
       res.status(400).json({
         status: 400,
@@ -131,5 +136,5 @@ module.exports = function (usersRepository) {
       })
     })
   })
-  return router
+  return { public: routerPublic, private: routerPrivate }
 }

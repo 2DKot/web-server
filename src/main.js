@@ -9,11 +9,15 @@ for (let route of routesNames) {
   }
   routes.push({
     url: '/' + route.name + '/',
-    router: require('./routes/' + route.name).apply(null, (repositories))
+    router: require('./routes/' + route.name).apply(null, repositories)
   })
 }
 
-const app = require('./app')(routes)
+const oauthModule = require('./oauth')
+const app = require('./app')(routes, oauthModule.getUser)
+
+require('./model/mongoose_connection')
+
 app.listen(3000, function () {
   console.log('Backend-server listening on port 3000!')
 })

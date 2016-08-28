@@ -8,6 +8,8 @@ const user1 = {
   isSuperUser: false
 }
 
+module.exports.user1 = user1
+
 const user2 = {
   _id: 2,
   username: 'admin',
@@ -15,6 +17,8 @@ const user2 = {
   fullname: 'Женя',
   isSuperUser: false
 }
+
+module.exports.user2 = user2
 
 module.exports.getById = function (id, callback) {
   console.log('in getById:', id)
@@ -31,31 +35,18 @@ module.exports.getById = function (id, callback) {
 module.exports.getByNameOrEmail = function (username, email, callback) {
   if (username === 'kot') {
     return callback(null, user1)
-  } else if (email === 'admin@aicontester') {
-    return callback(null, user2)
+  } else if (email === 'kot@mail.ru') {
+    return callback(null, user1)
   } else {
-    return null
+    return callback(null, null)
   }
 }
 
-// module.exports.create = function (username, password, email, fullname, callback) {
-//   var collection = db.collection('users')
-//   collection.insertOne({
-//     username: username,
-//     password: password,
-//     email: email,
-//     fullname: fullname,
-//     isSuperUser: false
-//   }, callback)
-// }
+module.exports.create = function (username, password, email, fullname, callback) {
+  callback()
+}
 
 
-// module.exports.update = function (user, callback) {
-//   var collection = db.collection('users')
-//   collection.updateOne({_id: user._id}, { $set: {
-//     username: user.username,
-//     password: user.password,
-//     email: user.email,
-//     fullname: user.fullname
-//   }}, callback)
-// }
+module.exports.update = function (user, callback) {
+  callback(null, user)
+}
